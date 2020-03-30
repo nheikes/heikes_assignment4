@@ -16,18 +16,18 @@ public class DuplicateRemover {
 		
 		try 
 		{
-			Scanner in = new Scanner(new File(dataFile));
-			
-			String holdWord;
-			while (in.hasNext())
+			try (Scanner in = new Scanner(new File(dataFile)))
 			{
-				holdWord = in.next();
-				if (!uniqueWords.contains(holdWord))
+				String holdWord;
+				while (in.hasNext())
 				{
-					uniqueWords.add(holdWord);
+					holdWord = in.next();
+					if (!uniqueWords.contains(holdWord))
+					{
+						uniqueWords.add(holdWord);
+					}
 				}
 			}
-			
 		} 
 		catch (FileNotFoundException e) 
 		{
@@ -39,12 +39,15 @@ public class DuplicateRemover {
 	public void write(String dataFile)
 	{
 		try {
+			
 			String output = "";
 			for (String string : uniqueWords) 
 			{
 				output += string + " ";
 			}
+			
 			output.trim();
+			
 		    try (FileOutputStream outputStream = new FileOutputStream(dataFile))
 		    {
 		    	

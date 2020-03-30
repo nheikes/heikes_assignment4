@@ -19,20 +19,20 @@ public class DuplicateCounter
 		
 		try 
 		{
-			Scanner in = new Scanner(new File(dataFile));
-			
-			String holdWord;
-			Integer counter;
-			while (in.hasNext())
+			try (Scanner in = new Scanner(new File(dataFile)))
 			{
-				holdWord = in.next();
-				counter = wordCounter.putIfAbsent(holdWord, 1);
-				if (counter != null)
+				String holdWord;
+				Integer counter;
+				while (in.hasNext())
 				{
-					wordCounter.replace(holdWord, ++counter);
+					holdWord = in.next();
+					counter = wordCounter.putIfAbsent(holdWord, 1);
+					if (counter != null)
+					{
+						wordCounter.replace(holdWord, ++counter);
+					}
 				}
 			}
-			
 		} 
 		catch (FileNotFoundException e) 
 		{
@@ -44,15 +44,17 @@ public class DuplicateCounter
 	public void write(String dataFile)
 	{
 		try {
+			
 			String output = "";
 			for (String string : wordCounter.keySet()) 
 			{
 				output += "Key: \"" + string + "\", Count: " + wordCounter.get(string) + " \n";
 			}
+			
 			output.trim();
+			
 		    try (FileOutputStream outputStream = new FileOutputStream(dataFile))
 		    {
-		    	
 		    	outputStream.write(output.getBytes());
 		    }
 		    
